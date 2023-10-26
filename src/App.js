@@ -1,41 +1,45 @@
-import './App.css';
-import { getStorage, ref, uploadBytes } from "firebase/storage";
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import storage from "./components/Firebase/config";
 
 function App() {
-  const [audioFile, setAudioFile] = useState(null);
-  const [uploading, setUploading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
 
-  const storage = getStorage();
-  const audioRef = ref(storage, 'audio/my-audio-file.mp3');
+  const storageRef = ref(storage, "audio/myAudio.mp3");
 
   const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    setAudioFile(selectedFile);
+    const file = e.target.files[0];
+    setSelectedFile(file);
   };
 
-  const uploadAudio = () => {
-    if (audioFile) {
-      setUploading(true);
-      uploadBytes(audioRef, audioFile)
+  const handleUpload = () => {
+    if (selectedFile) {
+      // Upload the selected audio file to Firebase Storage
+      uploadBytes(storageRef, selectedFile)
         .then((snapshot) => {
-          console.log('Uploaded the audio file!');
-          setUploading(false);
+          console.log("Audio uploaded successfully!");
+
+          // Get the download URL for the uploaded audio
+          getDownloadURL(snapshot.ref)
+            .then((downloadURL) => {
+              console.log("Audio download URL:", downloadURL);
+
+              // You can use the downloadURL to play or further process the audio
+            })
+            .catch((error) => {
+              console.error("Error getting download URL:", error);
+            });
         })
         .catch((error) => {
-          console.error('Error uploading the audio file:', error);
-          setUploading(false);
+          console.error("Error uploading audio:", error);
         });
     }
   };
 
   return (
-    <div className="App">
+    <div>
       <input type="file" accept="audio/*" onChange={handleFileChange} />
-      <button onClick={uploadAudio} disabled={uploading}>
-        Upload Audio
-      </button>
-      {uploading && <p>Uploading...</p>}
+      <button onClick={handleUpload}>Upload Audio</button>
     </div>
   );
 }
