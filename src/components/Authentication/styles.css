@@ -1,0 +1,108 @@
+.login-page {
+    width: 400px;
+    height: 300px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    
+    /*  move the box to center */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    justify-content: center;
+    align-items: center;
+
+  }
+  
+.login-page h1 {
+    font-size: 24px;
+    margin-top: 0;
+    text-align: center;
+  }
+  
+.login-page form {
+    margin-top: 20px;
+  }
+  
+.login-page input {
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+/* .login-page button:hover {
+    background-color: #0069d9;
+  } */
+
+.login-page .submit-button{
+    width: 85%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.login-page .captcha-refresh-btn{
+    display: hidden;
+    background: transparent;
+    border: transparent;
+
+    img{
+        width: 30px;
+        height: 30px;
+    
+    }
+}
+
+.login-page .siginlink{
+    p{
+        color: #007bff;
+    }
+}
+
+.login-page .record-btn{
+
+    display: hidden;
+    background: transparent;
+    border: transparent;
+
+    button{
+        background: transparent;
+        border: transparent;
+        cursor: pointer;
+    
+    }
+
+    img{
+        width: 30px;
+        height: 30px;
+    
+    }
+}
+
+.captcha-box{
+    /*  draw a box around the class */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    margin-left: 30px;
+    margin-right: 30px;
+
+    /* create columns */
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr;
+    grid-gap: 10px;
+    justify-content: center;
+    align-items: center;
+
+
+}
