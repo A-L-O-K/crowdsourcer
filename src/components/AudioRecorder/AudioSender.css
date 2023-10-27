@@ -1,0 +1,36 @@
+html,body{
+    margin: 0;
+    display: flex;
+
+}
+.record-button{
+    display: flex;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    bottom: 50%;
+    right: 50%;
+   
+
+    justify-content: center;
+    align-items: center;
+
+    /* img{
+        width: 100px;
+        height: 100px;
+       } */
+
+
+}
+img{
+    width: 100px;
+    height: 100px;  
+}
+
+
+button{
+        
+    display: hidden;
+    background: transparent;
+    border: transparent;
+}
