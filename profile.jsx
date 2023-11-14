@@ -2,9 +2,9 @@ import React, { useState, useRef } from 'react';
 import Webcam from 'react-webcam';
 
 const Profile = () => {
-  const [name, setName] = useState('Sasi');
-  const [email, setEmail] = useState('crowdsource@example.com');
-  const [region, setRegion] = useState('uganda'); 
+  const [name, setName] = useState('John Doe');
+  const [email, setEmail] = useState('john.doe@example.com');
+  const [region, setRegion] = useState('US'); // Default region
   const [isEditing, setIsEditing] = useState(false);
   const [savedProfiles, setSavedProfiles] = useState([]);
   const [capturedPhoto, setCapturedPhoto] = useState(null);
@@ -74,7 +74,7 @@ const Profile = () => {
     <div style={styles.profileBox}>
       <h1>Profile</h1>
       <div style={styles.formGroup}>
-        <label>Name: </label>
+        <label>Name:</label>
         {isEditing ? (
           <input
             type="text"
@@ -86,7 +86,7 @@ const Profile = () => {
         )}
       </div>
       <div style={styles.formGroup}>
-        <label>Email: </label>
+        <label>Email:</label>
         {isEditing ? (
           <input
             type="email"
@@ -98,7 +98,7 @@ const Profile = () => {
         )}
       </div>
       <div style={styles.formGroup}>
-        <label>Region: </label>
+        <label>Region:</label>
         {isEditing ? (
           <input
             type="text"
@@ -111,16 +111,15 @@ const Profile = () => {
       </div>
       <div style={styles.formGroup}>
         {isEditing ? (
-          <>
+          <div style={styles.buttonGroup}>
             <button onClick={handleSaveClick}>Save</button>
             <button onClick={handleEditClick}>Cancel</button>
-          </>
+          </div>
         ) : (
-          <>
+          <div style={styles.buttonGroup}>
             <button onClick={handleEditClick}>Edit Profile</button>
             <button onClick={handleDeleteClick}>Delete Account</button>
-            
-          </>
+          </div>
         )}
       </div>
 
@@ -138,11 +137,11 @@ const Profile = () => {
           <h2>Saved Profiles:</h2>
           <ul>
             {savedProfiles.map((profile, index) => (
-              <li key={index}>
+              <li key={index} style={styles.savedProfileItem}>
                 <div>
                   <strong>{profile.name}</strong> - {profile.email} - {profile.region}
                 </div>
-                {profile.photo && <img src={profile.photo} alt="Profile" style={styles.photo} />}
+                {profile.photo && <img src={profile.photo} alt="Profile" style={styles.savedProfilePhoto} />}
               </li>
             ))}
           </ul>
@@ -161,20 +160,76 @@ const Profile = () => {
             width={240}
           />
           <button onClick={handleCaptureClick}>Capture</button>
-
-        </div>)}
-        {/* Display the captured photo */}
-      {capturedPhoto && (
-        <div style={styles.capturedPhotoContainer}>
-          <h3>Captured Photo</h3>
-          <img src={capturedPhoto} alt="Captured" style={styles.capturedPhoto} />
         </div>
       )}
     </div>
   );
 };
 
+const Data = () => {
+  return (
+    <div style={styles.dataBox}>
+      <h1>Data</h1>
+      {/* Add your Data component content here */}
+    </div>
+  );
+};
+
+const App = () => {
+  const [activePage, setActivePage] = useState('Profile');
+
+  return (
+    <div style={styles.appContainer}>
+      <div style={styles.navBar}>
+        <div
+          style={activePage === 'Profile' ? styles.activeNavItem : styles.navItem}
+          onClick={() => setActivePage('Profile')}
+        >
+          Profile
+        </div>
+        <div
+          style={activePage === 'Data' ? styles.activeNavItem : styles.navItem}
+          onClick={() => setActivePage('Data')}
+        >
+          Data
+        </div>
+      </div>
+      <div style={styles.pageContainer}>
+        {activePage === 'Profile' && <Profile />}
+        {activePage === 'Data' && <Data />}
+      </div>
+    </div>
+  );
+};
+
 const styles = {
+  appContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+  },
+  navBar: {
+    width: '100px',
+    border: '1px solid #ccc',
+    marginRight: '20px',
+    textAlign: 'center',
+  },
+  navItem: {
+    padding: '10px',
+    cursor: 'pointer',
+    borderBottom: '1px solid #ccc',
+  },
+  activeNavItem: {
+    padding: '10px',
+    cursor: 'pointer',
+    backgroundColor: '#eee',
+    borderBottom: '1px solid #ccc',
+    fontWeight: 'bold',
+  },
+  pageContainer: {
+    flex: 1,
+  },
   profileBox: {
     textAlign: 'center',
     padding: '20px',
@@ -185,17 +240,22 @@ const styles = {
   },
   formGroup: {
     marginBottom: '15px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  savedProfiles: {
-    marginTop: '20px',
+  buttonGroup: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  photo: {
+  savedProfileItem: {
+    marginBottom: '10px',
+  },
+  savedProfilePhoto: {
     maxWidth: '100%',
     maxHeight: '100px',
     marginTop: '10px',
-  },
-  webcamContainer: {
-    marginTop: '20px',
   },
   capturedPhotoContainer: {
     marginTop: '20px',
@@ -205,6 +265,19 @@ const styles = {
     maxHeight: '200px',
     marginTop: '10px',
   },
+  webcamContainer: {
+    marginTop: '20px',
+  },
+  savedProfiles: {
+    marginTop: '20px',
+  },
+  dataBox: {
+    textAlign: 'center',
+    padding: '20px',
+    border: '1px solid #ccc',
+    borderRadius: '8px',
+    maxWidth: '600px',
+  },
 };
 
-export default Profile;
+export default App;
