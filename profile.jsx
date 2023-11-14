@@ -2,13 +2,12 @@ import React, { useState, useRef } from 'react';
 import Webcam from 'react-webcam';
 
 const Profile = () => {
-  const [name, setName] = useState('John Doe');
-  const [email, setEmail] = useState('john.doe@example.com');
-  const [region, setRegion] = useState('US'); // Default region
+  const [name, setName] = useState('Sasi');
+  const [email, setEmail] = useState('crowdsource@example.com');
+  const [region, setRegion] = useState('uganda'); 
   const [isEditing, setIsEditing] = useState(false);
   const [savedProfiles, setSavedProfiles] = useState([]);
-  const [capturedPhotos, setCapturedPhotos] = useState({});
-  const [currentProfile, setCurrentProfile] = useState(null);
+  const [capturedPhoto, setCapturedPhoto] = useState(null);
 
   const webcamRef = useRef(null);
 
@@ -24,34 +23,21 @@ const Profile = () => {
     setIsEditing(false);
 
     if (isEmailUnique(email)) {
-      if (webcamRef.current) {
-        const photoURL = capturePhoto();
-        setCapturedPhotos({
-          ...capturedPhotos,
-          [email]: photoURL,
-        });
-      }
-
-      setSavedProfiles([...savedProfiles, { name, email, region }]);
-      setCurrentProfile({ name, email, region });
+      // Add the current profile to the list of saved profiles with the captured photo
+      setSavedProfiles([...savedProfiles, { name, email, region, photo: capturedPhoto }]);
+      setCapturedPhoto(null); // Reset captured photo after saving
     } else {
       alert('Email must be unique.');
     }
   };
 
   const handleDeleteClick = () => {
+    // Delete the most recently saved profile from the list
     if (savedProfiles.length > 0) {
       const updatedProfiles = [...savedProfiles];
       updatedProfiles.pop();
       setSavedProfiles(updatedProfiles);
     }
-
-    // Reset the current profile and its captured photo when deleting the account
-    setCurrentProfile(null);
-    setCapturedPhotos({
-      ...capturedPhotos,
-      [email]: null,
-    });
   };
 
   const capturePhoto = () => {
@@ -70,16 +56,17 @@ const Profile = () => {
       );
     }
 
-    return canvas.toDataURL('image/png');
+    const photoURL = canvas.toDataURL('image/png');
+    setCapturedPhoto(photoURL);
+
+    return photoURL;
   };
 
   const handleCaptureClick = () => {
+    // Capture photo when the "Capture" button is clicked
     if (webcamRef.current) {
-      const capturedPhotoURL = capturePhoto();
-      setCapturedPhotos({
-        ...capturedPhotos,
-        [email]: capturedPhotoURL,
-      });
+      const photoURL = capturePhoto();
+      setCapturedPhoto(photoURL);
     }
   };
 
@@ -132,9 +119,18 @@ const Profile = () => {
           <>
             <button onClick={handleEditClick}>Edit Profile</button>
             <button onClick={handleDeleteClick}>Delete Account</button>
+            
           </>
         )}
       </div>
+
+      {/* Display the captured photo before saving */}
+      {capturedPhoto && (
+        <div style={styles.capturedPhotoContainer}>
+          <h3>Captured Photo</h3>
+          <img src={capturedPhoto} alt="Captured Photo" style={styles.capturedPhoto} />
+        </div>
+      )}
 
       {/* Display the list of saved profiles */}
       {savedProfiles.length > 0 && (
@@ -146,13 +142,7 @@ const Profile = () => {
                 <div>
                   <strong>{profile.name}</strong> - {profile.email} - {profile.region}
                 </div>
-                {capturedPhotos[profile.email] && (
-                  <img
-                    src={capturedPhotos[profile.email]}
-                    alt={`Captured Photo for ${profile.name}`}
-                    style={styles.photo}
-                  />
-                )}
+                {profile.photo && <img src={profile.photo} alt="Profile" style={styles.photo} />}
               </li>
             ))}
           </ul>
@@ -171,6 +161,13 @@ const Profile = () => {
             width={240}
           />
           <button onClick={handleCaptureClick}>Capture</button>
+
+        </div>)}
+        {/* Display the captured photo */}
+      {capturedPhoto && (
+        <div style={styles.capturedPhotoContainer}>
+          <h3>Captured Photo</h3>
+          <img src={capturedPhoto} alt="Captured" style={styles.capturedPhoto} />
         </div>
       )}
     </div>
@@ -199,6 +196,14 @@ const styles = {
   },
   webcamContainer: {
     marginTop: '20px',
+  },
+  capturedPhotoContainer: {
+    marginTop: '20px',
+  },
+  capturedPhoto: {
+    maxWidth: '100%',
+    maxHeight: '200px',
+    marginTop: '10px',
   },
 };
 
