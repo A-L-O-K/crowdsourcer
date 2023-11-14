@@ -7,8 +7,8 @@ const Profile = () => {
   const [region, setRegion] = useState('US'); // Default region
   const [isEditing, setIsEditing] = useState(false);
   const [savedProfiles, setSavedProfiles] = useState([]);
-  const [photo, setPhoto] = useState(null);
-  const [capturedPhoto, setCapturedPhoto] = useState(null);
+  const [capturedPhotos, setCapturedPhotos] = useState({});
+  const [currentProfile, setCurrentProfile] = useState(null);
 
   const webcamRef = useRef(null);
 
@@ -26,10 +26,14 @@ const Profile = () => {
     if (isEmailUnique(email)) {
       if (webcamRef.current) {
         const photoURL = capturePhoto();
-        setPhoto(photoURL);
+        setCapturedPhotos({
+          ...capturedPhotos,
+          [email]: photoURL,
+        });
       }
 
-      setSavedProfiles([...savedProfiles, { name, email, region, photo }]);
+      setSavedProfiles([...savedProfiles, { name, email, region }]);
+      setCurrentProfile({ name, email, region });
     } else {
       alert('Email must be unique.');
     }
@@ -41,6 +45,13 @@ const Profile = () => {
       updatedProfiles.pop();
       setSavedProfiles(updatedProfiles);
     }
+
+    // Reset the current profile and its captured photo when deleting the account
+    setCurrentProfile(null);
+    setCapturedPhotos({
+      ...capturedPhotos,
+      [email]: null,
+    });
   };
 
   const capturePhoto = () => {
@@ -65,7 +76,10 @@ const Profile = () => {
   const handleCaptureClick = () => {
     if (webcamRef.current) {
       const capturedPhotoURL = capturePhoto();
-      setCapturedPhoto(capturedPhotoURL);
+      setCapturedPhotos({
+        ...capturedPhotos,
+        [email]: capturedPhotoURL,
+      });
     }
   };
 
@@ -132,7 +146,13 @@ const Profile = () => {
                 <div>
                   <strong>{profile.name}</strong> - {profile.email} - {profile.region}
                 </div>
-                {profile.photo && <img src={profile.photo} alt="Profile" style={styles.photo} />}
+                {capturedPhotos[profile.email] && (
+                  <img
+                    src={capturedPhotos[profile.email]}
+                    alt={`Captured Photo for ${profile.name}`}
+                    style={styles.photo}
+                  />
+                )}
               </li>
             ))}
           </ul>
@@ -151,14 +171,6 @@ const Profile = () => {
             width={240}
           />
           <button onClick={handleCaptureClick}>Capture</button>
-        </div>
-      )}
-
-      {/* Display the captured photo */}
-      {capturedPhoto && (
-        <div style={styles.capturedPhotoContainer}>
-      
-          <img src={capturedPhoto} alt="Captured" style={styles.capturedPhoto} />
         </div>
       )}
     </div>
@@ -187,14 +199,6 @@ const styles = {
   },
   webcamContainer: {
     marginTop: '20px',
-  },
-  capturedPhotoContainer: {
-    marginTop: '20px',
-  },
-  capturedPhoto: {
-    maxWidth: '100%',
-    maxHeight: '200px',
-    marginTop: '10px',
   },
 };
 
