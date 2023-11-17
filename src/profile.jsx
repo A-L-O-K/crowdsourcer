@@ -1,16 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Webcam from 'react-webcam';
-import { useLocation } from 'react-router-dom';
-import {  doc, setDoc ,getDoc} from "firebase/firestore";
+import { useLocation,useNavigate } from 'react-router-dom';
+import {  doc, setDoc ,getDoc,onSnapshot, updateDoc} from "firebase/firestore";
 import { app,firestore } from './components/Firebase/config.js';
+import { getAuth, createUserWithEmailAndPassword} from "firebase/auth";
 const Profile = () => {
   const location=useLocation();
+  const navigate=useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [region, setRegion] = useState(''); // Default region
+  const [region, setRegion] = useState('');
   const [isEditing, setIsEditing] = useState(false);
-  // what profiles
-  
+
   const fetchDocument = async () => {
     try {
       const docRef = doc(firestore, "credentials",location.state.uuid);
@@ -18,16 +19,16 @@ const Profile = () => {
 
       if (docSnap.exists()) {
         console.log("Document data:", docSnap.data());
-        setName(docSnap.data().email);
-        setEmail(docSnap.data().password);
+        setName(docSnap.data().name);
+        setEmail(docSnap.data().email);
       } else {
         console.log("No such document!");
-        // setData("Document does not exist."); 
       }
     } catch (error) {
       console.error("Error fetching document:", error);
     }
   };
+
 
   useEffect(() => {
     fetchDocument();
@@ -47,8 +48,24 @@ const Profile = () => {
     return !savedProfiles.some((profile) => profile.email === newEmail);
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async(e) => {
     setIsEditing(false);
+    const auth = getAuth(app);
+    const updateref = doc(firestore, "credentials", uuid);
+  e.preventDefault();
+
+  try {
+    await updateDoc(updateref, {
+      name: name,
+      email: email,
+      region: region,
+    });
+    console.log("done");
+
+  }
+  catch (error) {
+    console.error(error);
+  }
 
     if (isEmailUnique(email)) {
       // Add the current profile to the list of saved profiles with the captured photo
@@ -97,9 +114,21 @@ const Profile = () => {
       setCapturedPhoto(photoURL);
     }
   };
+  const handleLogoutClick = async (e) => {
+    e.preventDefault(); // Prevent the default form submission behavior
+  
+    // Capture photo when the "Capture" button is clicked
+    navigate('/');
+  };
+  
+  
+
 
   return (
     <div style={styles.profileBox}>
+      <div>
+        <button style={styles.buttonGroup} onClick={(e) => handleLogoutClick(e)}>Logout</button>
+      </div>
       <h1>Profile</h1>
       <div style={styles.formGroup}>
         <label>Name:</label>
@@ -131,6 +160,7 @@ const Profile = () => {
           <input
             type="text"
             value={region}
+
             onChange={(e) => setRegion(e.target.value)}
           />
         ) : (
@@ -140,7 +170,7 @@ const Profile = () => {
       <div style={styles.formGroup}>
         {isEditing ? (
           <div style={styles.buttonGroup}>
-            <button onClick={handleSaveClick}>Save</button>
+            <button onClick={(e)=>{handleSaveClick(e)}}>Save</button>
             <button onClick={handleEditClick}>Cancel</button>
           </div>
         ) : (
