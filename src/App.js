@@ -11,7 +11,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 function App() {
   return (
     <div className="App">
-      <Router>
+      {/* <Router>
         <Routes>
           <Route path="/" element={<Login />} />
         </Routes>
@@ -19,7 +19,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
       
           <Route path="/SignUp" element={<Signup />} />
-        </Routes>
+        </Routes> */}
         
 
         {/* <Signup /> */}
@@ -27,10 +27,10 @@ function App() {
         {/* <AudioRecorder /> */}
         {/* <AudioSender/> */}
         {/* <Profile/> */}
-        {/* <DataPage /> */}
+        <DataPage />
 
         {/* <SendAudio /> */}
-      </Router>
+      {/* </Router> */}
     </div>
   );
 }

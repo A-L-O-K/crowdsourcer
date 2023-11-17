@@ -4,7 +4,7 @@ const Data = () => {
   const [recordedVoices, setRecordedVoices] = useState([]);
   const [currentVoiceIndex, setCurrentVoiceIndex] = useState(0);
   const [currentRecording, setCurrentRecording] = useState('');
-
+  var array2=['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
   const handlePreviousVoice = () => {
     if (currentVoiceIndex > 0) {
       setCurrentVoiceIndex(currentVoiceIndex - 1);
@@ -33,6 +33,14 @@ const Data = () => {
   return (
     <div style={styles.dataBox}>
       <h1>Data</h1>
+      <div>
+        {array2.map((letter) => (
+          <button key={letter} onClick={() => setCurrentRecording(letter)}>
+            {letter}
+          </button>
+        ))}
+
+      </div>
       <div>
         <button onClick={handlePreviousVoice}>Previous Voice</button>
         <button onClick={handleRetryVoice}>Retry Voice</button>

@@ -11,12 +11,12 @@ const Profile = () => {
   const [email, setEmail] = useState('');
   const [region, setRegion] = useState('');
   const [isEditing, setIsEditing] = useState(false);
-
+  const array2=['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
   const fetchDocument = async () => {
     try {
       const docRef = doc(firestore, "credentials",location.state.uuid);
       const docSnap = await getDoc(docRef);
-
+      
       if (docSnap.exists()) {
         console.log("Document data:", docSnap.data());
         setName(docSnap.data().name);

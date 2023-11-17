@@ -10,15 +10,20 @@ const Signup = () => {
   const [name,setName]=useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [retypedPasswor, confirmRetype] = useState('');
-  const array=[0]*26;
-  console.log(array);
+  const [retypedPasswor, confirmRetype] = useState(''); 
+  var array=[];
+
+  for (let i = 0; i < 26; i++) {
+    array[i]=false;
+    
+  }
+  console.log(array)
   const navigate=useNavigate();
 
   return (
     <div className="login-page">
       <h1>SignUp</h1>
-      <form onSubmit={(e)=>{dataadd(e,navigate,name,email, password)}}>
+      <form onSubmit={(e)=>{dataadd(e,navigate,name,email, password,array)}}>
         <input
   type="name"
   placeholder="Name"
@@ -53,7 +58,7 @@ const Signup = () => {
     </div>
   );
 };
-async function dataadd(e,navigate,name, email, password) {
+async function dataadd(e,navigate,name, email, password,array) {
   const auth = getAuth(app);
   const db = getFirestore(app);
   e.preventDefault();
@@ -65,11 +70,9 @@ async function dataadd(e,navigate,name, email, password) {
       email: email,
       password: password,
       region: "",
+      flag: array,
     });
-    // await setDoc(doc(db, "Letters", userCredentials.user.uid), {
-    //   flag:[""]*26,
-    //   reference:[""]*26,
-    //   letters:[""]*26,
+
 
     // });
     navigate("/");
