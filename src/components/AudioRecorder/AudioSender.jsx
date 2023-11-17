@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import storage from "../Firebase/config";
+import {storage} from "../Firebase/config";
 import './AudioSender.css'
 import { wait } from "@testing-library/user-event/dist/utils";
 
