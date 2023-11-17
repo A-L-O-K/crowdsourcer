@@ -2,7 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import Webcam from 'react-webcam';
 import { useLocation } from 'react-router-dom';
 import {  doc, setDoc ,getDoc} from "firebase/firestore";
-import { app,firestore } from './components/Firebase/config.js';
+import { app,firestore } from '../Firebase/config.js';
+import './styles.css'
+import AudioSender from '../AudioRecorder/AudioSender.jsx';
+
 const Profile = () => {
   const location=useLocation();
   const [name, setName] = useState('');
@@ -99,9 +102,15 @@ const Profile = () => {
   };
 
   return (
-    <div style={styles.profileBox}>
-      <h1>Profile</h1>
-      <div style={styles.formGroup}>
+    <div 
+    // style={styles.profileBox} 
+    className='profileDetails'>
+      <div>
+        <h1>Profile</h1>
+      </div>
+      <div 
+      // style={styles.formGroup}
+      >
         <label>Name:</label>
         {isEditing ? (
           <input
@@ -113,7 +122,9 @@ const Profile = () => {
           <span>{name}</span>
         )}
       </div>
-      <div style={styles.formGroup}>
+      <div 
+      // style={styles.formGroup}
+      >
         <label>Email:</label>
         {isEditing ? (
           <input
@@ -197,10 +208,7 @@ const Profile = () => {
 
 const Data = () => {
   return (
-    <div style={styles.dataBox}>
-      <h1>Data</h1>
-      {/* Add your Data component content here */}
-    </div>
+    <AudioSender/>
   );
 };
 
@@ -208,17 +216,21 @@ const App = () => {
   const [activePage, setActivePage] = useState('Profile');
 
   return (
-    <div style={styles.appContainer}>
-      <div style={styles.navBar}>
+    <div 
+    // style={styles.appContainer}
+    >
+      <div 
+      // style={styles.navBar} 
+      className='navBarContainer'>
         <div
-          style={activePage === 'Profile' ? styles.activeNavItem : styles.navItem}
-          onClick={() => setActivePage('Profile')}
+          // style={activePage === 'Profile' ? styles.activeNavItem : styles.navItem}
+          onClick={() => setActivePage('Profile')} className='profile'
         >
           Profile
         </div>
         <div
-          style={activePage === 'Data' ? styles.activeNavItem : styles.navItem}
-          onClick={() => setActivePage('Data')}
+          // style={activePage === 'Data' ? styles.activeNavItem : styles.navItem}
+          onClick={() => setActivePage('Data')} className='data'
         >
           Data
         </div>

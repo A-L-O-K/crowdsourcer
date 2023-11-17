@@ -1,0 +1,52 @@
+
+.navBarContainer{
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    height: 50px;
+    background-color: #fff;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    /* z-index: 999; */
+    cursor: pointer;
+
+    /* put space between the divs within the container */
+    .navBarLeft, .navBarCenter, .navBarRight{
+        display: flex;
+        align-items: center;
+    }
+
+    font-size: 20px;
+
+    /* put border for profile */
+    .profile{
+        background-color: aqua;
+        padding-left: 25%;
+        padding-right: 25%;
+    }
+
+    .data{
+        background-color: crimson;
+        padding-left: 25%;
+        padding-right: 25%;
+    }
+}
+
+
+.profileDetails{
+    border: 1px solid black;
+
+    /* move he container to the center of the screen */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* width: 50%; */
+    /* height: 50%; */
+
+
+    
+}

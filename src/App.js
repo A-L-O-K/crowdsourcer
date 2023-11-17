@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./App.css";
-import Profile from "./profile.jsx";
+import Profile from "./components/Profile/profile";
 import DataPage from "./DataPage.jsx";
 
 import Login from "./components/Authentication/login";
@@ -20,6 +20,7 @@ function App() {
       
           <Route path="/SignUp" element={<Signup />} />
         </Routes>
+        
         
 
         {/* <Signup /> */}
