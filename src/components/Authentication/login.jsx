@@ -1,25 +1,20 @@
 import React, { useState } from 'react';
 import './styles.css';
 import { startRecording, refresh } from './script.js';
+import { app } from '../Firebase/config.js';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from 'react-router-dom';
+const auth = getAuth(app);
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    // TODO: Validate the form fields
-
-    // TODO: Send the login request to the backend
-
-    // TODO: Redirect the user to the home page if the login is successful
-  };
-
+  const navigate = useNavigate(); 
   return (
     <div className="login-page">
       <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => Abc(navigate,e, email, password)}>
         <input
           type="email"
           placeholder="Email"
@@ -60,4 +55,28 @@ const Login = () => {
   );
 };
 
-export default Login;
+async function Abc(navigate,e,email,password){    
+  e.preventDefault();
+  
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    console.log("logged in");
+    console.log({ auth });
+    console.log(userCredential);
+
+    const user = userCredential.user;
+    const uuid = user.uid; // Access the uid from userCredential
+
+    // Check if user is signed in before navigating
+    if (user) {
+      navigate('/profile', { state: { "uuid": uuid } });
+    } else {
+      // Handle the case where user is not signed in
+      console.log("User not signed in");
+    }
+  } catch (error) {
+    navigate('/SignUp');
+    console.log(error);
+  } 
+};
+export default Login; 

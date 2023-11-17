@@ -1,19 +1,47 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Webcam from 'react-webcam';
-
+import { useLocation } from 'react-router-dom';
+import {  doc, setDoc ,getDoc} from "firebase/firestore";
+import { app,firestore } from './components/Firebase/config.js';
 const Profile = () => {
-  const [name, setName] = useState('John Doe');
-  const [email, setEmail] = useState('john.doe@example.com');
-  const [region, setRegion] = useState('US'); // Default region
+  const location=useLocation();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [region, setRegion] = useState(''); // Default region
   const [isEditing, setIsEditing] = useState(false);
+  // what profiles
+  
+  const fetchDocument = async () => {
+    try {
+      const docRef = doc(firestore, "credentials",location.state.uuid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+        setName(docSnap.data().email);
+        setEmail(docSnap.data().password);
+      } else {
+        console.log("No such document!");
+        // setData("Document does not exist."); 
+      }
+    } catch (error) {
+      console.error("Error fetching document:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDocument();
+  }, []);
+  
   const [savedProfiles, setSavedProfiles] = useState([]);
   const [capturedPhoto, setCapturedPhoto] = useState(null);
-
   const webcamRef = useRef(null);
-
+  const uuid=location.state.uuid;
+  
   const handleEditClick = () => {
     setIsEditing(true);
   };
+
 
   const isEmailUnique = (newEmail) => {
     return !savedProfiles.some((profile) => profile.email === newEmail);
@@ -117,7 +145,8 @@ const Profile = () => {
           </div>
         ) : (
           <div style={styles.buttonGroup}>
-            <button onClick={handleEditClick}>Edit Profile</button>
+            {/* make a button which on hover */}
+            <button  onClick={handleEditClick}>Edit Profile</button>
             <button onClick={handleDeleteClick}>Delete Account</button>
           </div>
         )}
@@ -248,6 +277,18 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'rgba(238, 238, 238, 0.5)', // Set background color with alpha channel for transparency
+    fontWeight: 'bold',
+    margin: '20px',
+    padding: '20px',
+    borderRadius: '8px',
+    marginRight: '10px',
+    cursor: 'pointer',
+  },
+  
+  // Style for buttons inside the button group
+  button: {
+    marginRight: '10px', // Adjust the margin-right as needed
   },
   savedProfileItem: {
     marginBottom: '10px',
