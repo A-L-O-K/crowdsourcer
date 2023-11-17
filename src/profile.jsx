@@ -127,6 +127,13 @@ const Profile = () => {
   return (
     <div style={styles.profileBox}>
       <div>
+        {array2.map((letter) => (
+          <button key={letter} onClick={() => setRegion(letter)}>
+            {letter}
+          </button>
+        ))}
+      </div>
+      <div>
         <button style={styles.buttonGroup} onClick={(e) => handleLogoutClick(e)}>Logout</button>
       </div>
       <h1>Profile</h1>
@@ -229,7 +236,7 @@ const Data = () => {
   return (
     <div style={styles.dataBox}>
       <h1>Data</h1>
-      {/* Add your Data component content here */}
+      
     </div>
   );
 };
