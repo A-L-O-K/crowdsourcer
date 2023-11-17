@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Webcam from 'react-webcam';
-import { useLocation } from 'react-router-dom';
-import {  doc, setDoc ,getDoc} from "firebase/firestore";
+import { useLocation,useNavigate } from 'react-router-dom';
+import {  doc, setDoc ,getDoc,onSnapshot, updateDoc} from "firebase/firestore";
 import { app,firestore } from '../Firebase/config.js';
+import { getAuth, createUserWithEmailAndPassword} from "firebase/auth";
 import './styles.css'
 import AudioSender from '../AudioRecorder/AudioSender.jsx';
 
