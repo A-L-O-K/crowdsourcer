@@ -1,37 +1,46 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Webcam from 'react-webcam';
-import { useLocation,useNavigate } from 'react-router-dom';
-import {  doc, setDoc ,getDoc,onSnapshot, updateDoc} from "firebase/firestore";
-import { app,firestore } from '../Firebase/config.js';
-import { getAuth, createUserWithEmailAndPassword} from "firebase/auth";
-import './styles.css'
-import AudioSender from '../AudioRecorder/AudioSender.jsx';
+import { useLocation, useNavigate } from 'react-router-dom';
+import {  doc, setDoc ,getDoc} from "firebase/firestore";
+import { app,firestore } from './components/Firebase/config.js';
+import Header from './components/Common/Header.jsx';
 
 const Profile = () => {
   const location=useLocation();
-  const navigate=useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [region, setRegion] = useState('');
+  const [region, setRegion] = useState(''); // Default region
   const [isEditing, setIsEditing] = useState(false);
+  const uuid=localStorage.getItem("uuid");
+  const navigate = useNavigate ();
+  useEffect(() => {
+   if(!uuid){
+      navigate("/")
+   }
+  }, []);
+  
 
+  // what profiles
+
+
+  
   const fetchDocument = async () => {
     try {
-      const docRef = doc(firestore, "credentials",location.state.uuid);
+      const docRef = doc(firestore, "credentials",uuid);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
         console.log("Document data:", docSnap.data());
-        setName(docSnap.data().name);
-        setEmail(docSnap.data().email);
+        setName(docSnap.data().email);
+        setEmail(docSnap.data().password);
       } else {
         console.log("No such document!");
+        // setData("Document does not exist."); 
       }
     } catch (error) {
       console.error("Error fetching document:", error);
     }
   };
-
 
   useEffect(() => {
     fetchDocument();
@@ -40,7 +49,6 @@ const Profile = () => {
   const [savedProfiles, setSavedProfiles] = useState([]);
   const [capturedPhoto, setCapturedPhoto] = useState(null);
   const webcamRef = useRef(null);
-  const uuid=location.state.uuid;
   
   const handleEditClick = () => {
     setIsEditing(true);
@@ -51,24 +59,8 @@ const Profile = () => {
     return !savedProfiles.some((profile) => profile.email === newEmail);
   };
 
-  const handleSaveClick = async(e) => {
+  const handleSaveClick = () => {
     setIsEditing(false);
-    const auth = getAuth(app);
-    const updateref = doc(firestore, "credentials", uuid);
-  e.preventDefault();
-
-  try {
-    await updateDoc(updateref, {
-      name: name,
-      email: email,
-      region: region,
-    });
-    console.log("done");
-
-  }
-  catch (error) {
-    console.error(error);
-  }
 
     if (isEmailUnique(email)) {
       // Add the current profile to the list of saved profiles with the captured photo
@@ -117,26 +109,13 @@ const Profile = () => {
       setCapturedPhoto(photoURL);
     }
   };
-  const handleLogoutClick = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
-  
-    // Capture photo when the "Capture" button is clicked
-    navigate('/');
-  };
-  
-  
-
 
   return (
-    <div 
-    // style={styles.profileBox} 
-    className='profileDetails'>
-      <div>
-        <h1>Profile</h1>
-      </div>
-      <div 
-      // style={styles.formGroup}
-      >
+    <>
+    <Header />
+    <div style={styles.profileBox}>
+      <h1>Profile</h1>
+      <div style={styles.formGroup}>
         <label>Name:</label>
         {isEditing ? (
           <input
@@ -148,9 +127,7 @@ const Profile = () => {
           <span>{name}</span>
         )}
       </div>
-      <div 
-      // style={styles.formGroup}
-      >
+      <div style={styles.formGroup}>
         <label>Email:</label>
         {isEditing ? (
           <input
@@ -168,7 +145,6 @@ const Profile = () => {
           <input
             type="text"
             value={region}
-
             onChange={(e) => setRegion(e.target.value)}
           />
         ) : (
@@ -178,7 +154,7 @@ const Profile = () => {
       <div style={styles.formGroup}>
         {isEditing ? (
           <div style={styles.buttonGroup}>
-            <button onClick={(e)=>{handleSaveClick(e)}}>Save</button>
+            <button onClick={handleSaveClick}>Save</button>
             <button onClick={handleEditClick}>Cancel</button>
           </div>
         ) : (
@@ -230,45 +206,10 @@ const Profile = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 
-const Data = () => {
-  return (
-    <AudioSender/>
-  );
-};
-
-const App = () => {
-  const [activePage, setActivePage] = useState('Profile');
-
-  return (
-    <div 
-    // style={styles.appContainer}
-    >
-      <div 
-      // style={styles.navBar} 
-      className='navBarContainer'>
-        <div
-          // style={activePage === 'Profile' ? styles.activeNavItem : styles.navItem}
-          onClick={() => setActivePage('Profile')} className='profile'
-        >
-          Profile
-        </div>
-        <div
-          // style={activePage === 'Data' ? styles.activeNavItem : styles.navItem}
-          onClick={() => setActivePage('Data')} className='data'
-        >
-          Data
-        </div>
-      </div>
-      <div style={styles.pageContainer}>
-        {activePage === 'Profile' && <Profile />}
-        {activePage === 'Data' && <Data />}
-      </div>
-    </div>
-  );
-};
 
 const styles = {
   appContainer: {
@@ -360,4 +301,4 @@ const styles = {
   },
 };
 
-export default App;
+export default Profile;
