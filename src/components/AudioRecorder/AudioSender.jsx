@@ -30,7 +30,7 @@ function AudioSender() {
   // };
   const array2=['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
   useEffect(() => {
-    const reference = doc(app, "users", auth.currentUser.uid);
+    const reference = doc(app, "credentials", auth.currentUser.uid);
     getDoc(reference).then((docSnap) => {
       if (docSnap.exists()) {
         console.log("Document data:", docSnap.data());
