@@ -3,7 +3,7 @@ import Webcam from 'react-webcam';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {  doc, setDoc ,getDoc} from "firebase/firestore";
 import { app,firestore } from '../Firebase/config.js';
-import Header from '../../header.jsx';
+import Header from '../common/header.jsx';
 
 const Profile = () => {
   const location=useLocation();
@@ -11,13 +11,13 @@ const Profile = () => {
   const [email, setEmail] = useState('');
   const [region, setRegion] = useState(''); // Default region index
   const [isEditing, setIsEditing] = useState(false);
-  const uuid=localStorage.getItem("uuid");
+  // const uuid=localStorage.getItem("uuid");
   const navigate = useNavigate ();
-  useEffect(() => {
-   if(!uuid){
-      navigate("/")
-   }
-  }, []);
+  // useEffect(() => {
+  //  if(!uuid){
+  //     navigate("/")
+  //  }
+  // }, []);
   
 
   // what profiles
