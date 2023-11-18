@@ -5,19 +5,27 @@ import { getDoc,setDoc,doc } from "firebase/firestore";
 import './AudioSender.css'
 import { wait } from "@testing-library/user-event/dist/utils";
 import { getAuth} from "firebase/auth";
-import { app } from "../Firebase/config";
+import { app ,firestore} from "../Firebase/config";
+// import { getDownloadURL,ref } from "firebase/storage";
 
 function AudioSender() {
+  const [audioUrl, setAudioUrl] = useState(null);
+  const [audio] = useState(new Audio());
+  
   const [selectedFile, setSelectedFile] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const mediaRecorder = useRef(null);
   const [a, seta] = useState("")
-  // const db
-  const [checked, setChecked] = useState(false);
-  const auth = getAuth();
 
-  // useEffect(()
+  // const db
+  const [checked, setChecked] = useState([]);
+  const auth = getAuth(app);
+
+
+
+
+        
 
   const recordedChunks = useRef([]);
   const [first, setfirst] = useState("")
@@ -30,13 +38,12 @@ function AudioSender() {
   // };
   const array2=['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
   useEffect(() => {
-    const reference = doc(app, "credentials", auth.currentUser.uid);
-    getDoc(reference).then((docSnap) => {
+    const docRef = doc(firestore, "credentials", `${auth.currentUser.uid}`);    
+    getDoc(docRef).then((docSnap) => {
       if (docSnap.exists()) {
         console.log("Document data:", docSnap.data());
-        setfirst(docSnap.data().name)
+        setChecked(docSnap.data().name)
       } else {
-        // doc.data() will be undefined in this case
         console.log("No such document!");
       }
     });}, [])
@@ -81,8 +88,26 @@ function AudioSender() {
       }
     }
   };
-  const playAudio = () => {
-    
+  const playAudio = async(e,letter) => {
+    e.preventDefault();
+    const gsReference = ref(storage, `gs://olx-web-app-c944d.appspot.com/audio/${auth.currentUser.uid}/${letter}.wav`);
+
+      try {
+        // const storageRef = ref(storage, 'audio/a.wav');
+        const url = await getDownloadURL(gsReference);
+        setAudioUrl(url);
+      } catch (error) {
+        console.error('Error fetching audio URL:', error);
+      }
+      if (audioUrl) {
+        if (audio.paused) {
+          audio.src = audioUrl;
+          audio.play();
+        } else {
+          audio.pause();
+        }
+      }
+
   };
   const uploadAudio = (audioBlob,storageRef) => {
     if (selectedFile || audioBlob) {
@@ -115,16 +140,17 @@ function AudioSender() {
       {array2.map((letter) => (
         <div>
 
-        <button onClick={(e)=>{handleRecording(e,letter)}}>
-    {letter === a ? (
+        <button style={{cursor:'pointer'}}onClick={(e)=>{playAudio(e,letter)}}>
+    {/* {letter === a ? (
       <img
-      src={isPlaying ? "https://imgs.search.brave.com/94zz8bQ3Ipr0-XIdOXCPHjIj9LPsVDQubyzS8Sb6T3E/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAxLzg0LzcwLzU1/LzM2MF9GXzE4NDcw/NTU1N18yZXg3ZWgz/NU1VV1Z0b2hlTTNR/Tk8xNE52VFpBZWpm/Vy5qcGc"
+      src={audio.paused ? "https://imgs.search.brave.com/94zz8bQ3Ipr0-XIdOXCPHjIj9LPsVDQubyzS8Sb6T3E/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAxLzg0LzcwLzU1/LzM2MF9GXzE4NDcw/NTU1N18yZXg3ZWgz/NU1VV1Z0b2hlTTNR/Tk8xNE52VFpBZWpm/Vy5qcGc"
         : "https://as2.ftcdn.net/v2/jpg/01/75/02/99/1000_F_175029918_lZThlHzCNYdvoykGWtckxT7wksSa71ji.jpg"}
         alt="some description"
         />
         ) : (
       <img src="https://as2.ftcdn.net/v2/jpg/01/75/02/99/1000_F_175029918_lZThlHzCNYdvoykGWtckxT7wksSa71ji.jpg" alt="some description" />
-      )}
+      )} */}
+      aewanfdj
         </button>
               <button onClick={(e)=>{handleRecording(e,letter)}}>
     {letter === a ? (
@@ -139,8 +165,7 @@ function AudioSender() {
         {/* <input type="checkbox" />
          */}
 {/* CHECKBOX WITH VALUE TRUE */}
-         <input type="checkbox" checked={checked}
-        ></input>
+<input type="checkbox" checked={checked.includes({letter})} />
         {' '}
       </label>{letter}</div>
         </button>
