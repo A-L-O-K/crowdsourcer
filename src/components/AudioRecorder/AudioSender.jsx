@@ -21,12 +21,6 @@ function AudioSender() {
   // const db
   const [checked, setChecked] = useState([]);
   const auth = getAuth(app);
-
-
-
-
-        
-
   const recordedChunks = useRef([]);
   const [first, setfirst] = useState("")
   // const storageRef = ref(storage, "audio/");
@@ -39,7 +33,7 @@ function AudioSender() {
   const array2=['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
   useEffect(() => {
     const docRef = doc(firestore, "credentials", `${auth.currentUser.uid}`);    
-    getDoc(docRef).then((docSnap) => {
+    setDoc(docRef).then((docSnap) => {
       if (docSnap.exists()) {
         console.log("Document data:", docSnap.data());
         setChecked(docSnap.data().name)
@@ -69,6 +63,7 @@ function AudioSender() {
           uploadAudio(blob,storageRef);
           recordedChunks.current = [];
           setfirst("audio uploaded sucessfully")
+
           wait(3000).then(() => {
             setfirst("")
           })  
@@ -89,6 +84,8 @@ function AudioSender() {
     }
   };
   const playAudio = async(e,letter) => {
+    seta(letter)
+
     e.preventDefault();
     const gsReference = ref(storage, `gs://olx-web-app-c944d.appspot.com/audio/${auth.currentUser.uid}/${letter}.wav`);
 
@@ -148,8 +145,8 @@ function AudioSender() {
         <button style={{cursor:'pointer'}}onClick={(e)=>{playAudio(e,letter)}}>
     {letter === a ? (
       <img
-      src={{isPlaying}? "https://imgs.search.brave.com/94zz8bQ3Ipr0-XIdOXCPHjIj9LPsVDQubyzS8Sb6T3E/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAxLzg0LzcwLzU1/LzM2MF9GXzE4NDcw/NTU1N18yZXg3ZWgz/NU1VV1Z0b2hlTTNR/Tk8xNE52VFpBZWpm/Vy5qcGc"
-        : "https://as2.ftcdn.net/v2/jpg/01/75/02/99/1000_F_175029918_lZThlHzCNYdvoykGWtckxT7wksSa71ji.jpg"}
+      src={{isPlaying}? ("https://imgs.search.brave.com/94zz8bQ3Ipr0-XIdOXCPHjIj9LPsVDQubyzS8Sb6T3E/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAxLzg0LzcwLzU1/LzM2MF9GXzE4NDcw/NTU1N18yZXg3ZWgz/NU1VV1Z0b2hlTTNR/Tk8xNE52VFpBZWpm/Vy5qcGc")
+        : ("https://as2.ftcdn.net/v2/jpg/01/75/02/99/1000_F_175029918_lZThlHzCNYdvoykGWtckxT7wksSa71ji.jpg")}
         alt="some description"
         />
         ) : (
