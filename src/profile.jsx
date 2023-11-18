@@ -4,6 +4,7 @@ import { useLocation,useNavigate } from 'react-router-dom';
 import {  doc, setDoc ,getDoc,onSnapshot, updateDoc} from "firebase/firestore";
 import { app,firestore } from './components/Firebase/config.js';
 import { getAuth, createUserWithEmailAndPassword} from "firebase/auth";
+import AudioSender from './components/AudioRecorder/AudioSender.jsx';
 const Profile = () => {
   const location=useLocation();
   const navigate=useNavigate();
@@ -11,7 +12,7 @@ const Profile = () => {
   const [email, setEmail] = useState('');
   const [region, setRegion] = useState('');
   const [isEditing, setIsEditing] = useState(false);
-  const array2=['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+
   const fetchDocument = async () => {
     try {
       const docRef = doc(firestore, "credentials",location.state.uuid);
@@ -42,7 +43,7 @@ const Profile = () => {
   const handleEditClick = () => {
     setIsEditing(true);
   };
-
+// data
 
   const isEmailUnique = (newEmail) => {
     return !savedProfiles.some((profile) => profile.email === newEmail);
@@ -126,13 +127,7 @@ const Profile = () => {
 
   return (
     <div style={styles.profileBox}>
-      <div>
-        {array2.map((letter) => (
-          <button key={letter} onClick={() => setRegion(letter)}>
-            {letter}
-          </button>
-        ))}
-      </div>
+  
       <div>
         <button style={styles.buttonGroup} onClick={(e) => handleLogoutClick(e)}>Logout</button>
       </div>
@@ -235,8 +230,7 @@ const Profile = () => {
 const Data = () => {
   return (
     <div style={styles.dataBox}>
-      <h1>Data</h1>
-      
+      <AudioSender/>
     </div>
   );
 };

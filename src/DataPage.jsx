@@ -39,7 +39,7 @@ const Data = () => {
             {letter}
           </button>
         ))}
-
+{/* data */}
       </div>
       <div>
         <button onClick={handlePreviousVoice}>Previous Voice</button>
