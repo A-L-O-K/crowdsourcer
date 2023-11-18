@@ -4,6 +4,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import {  doc, setDoc ,getDoc} from "firebase/firestore";
 import { app,firestore } from '../Firebase/config.js';
 import Header from '../common/header.jsx';
+// import css
+import './styles.css';
 
 const Profile = () => {
   const location=useLocation();
@@ -12,7 +14,8 @@ const Profile = () => {
   const [region, setRegion] = useState(''); // Default region index
   const [isEditing, setIsEditing] = useState(false);
   // const uuid=localStorage.getItem("uuid");
-  const navigate = useNavigate ();
+  const uuid=location.state.uuid;
+  // const navigate = useNavigate ();
   // useEffect(() => {
   //  if(!uuid){
   //     navigate("/")
