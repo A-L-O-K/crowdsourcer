@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {storage} from "../Firebase/config";
-import { getDoc,setDoc,doc } from "firebase/firestore";
+import { updateDoc,setDoc,doc } from "firebase/firestore";
 import './AudioSender.css'
 import { wait } from "@testing-library/user-event/dist/utils";
 import { getAuth} from "firebase/auth";
 import { app ,firestore} from "../Firebase/config";
-// import { getDownloadURL,ref } from "firebase/storage";
+// import { getDownloadURL,ref } from "firebase/storage";db
 
 function AudioSender() {
   const [audioUrl, setAudioUrl] = useState(null);
@@ -43,7 +43,9 @@ function AudioSender() {
     });}, [])
     
   const handleRecording = async (e,letter) => {
+    e.preventDefault();
     seta(letter)
+
     const storageRef = ref(storage, `audio/${auth.currentUser.uid}/${letter}.wav`);
 
     
@@ -62,6 +64,15 @@ function AudioSender() {
           const blob = new Blob(recordedChunks.current, { type: "audio/wav" });
           uploadAudio(blob,storageRef);
           recordedChunks.current = [];
+          const washingtonRef = doc(firestore, "credentials", `${auth.currentUser.uid}`);
+
+// Atomically add a new region to the "regions" array field.
+          const func=async(letter)=>{ 
+        await updateDoc(washingtonRef, {
+    flag: arrayUnion({letter})
+});
+          }
+          func(letter)
           setfirst("audio uploaded sucessfully")
 
           wait(3000).then(() => {

@@ -78,7 +78,6 @@ const Profile = () => {
   };
 
   const handleDeleteClick = () => {
-    // Delete the most recently saved profile from the list
     if (savedProfiles.length > 0) {
       const updatedProfiles = [...savedProfiles];
       updatedProfiles.pop();
