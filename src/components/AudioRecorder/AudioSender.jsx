@@ -100,11 +100,16 @@ function AudioSender() {
         console.error('Error fetching audio URL:', error);
       }
       if (audioUrl) {
+        // console.log(audio.paused)
         if (audio.paused) {
           audio.src = audioUrl;
+          setIsPlaying(true);
+
           audio.play();
         } else {
           audio.pause();
+          setIsPlaying(false);
+
         }
       }
 
@@ -141,15 +146,15 @@ function AudioSender() {
         <div>
 
         <button style={{cursor:'pointer'}}onClick={(e)=>{playAudio(e,letter)}}>
-    {/* {letter === a ? (
+    {letter === a ? (
       <img
-      src={audio.paused ? "https://imgs.search.brave.com/94zz8bQ3Ipr0-XIdOXCPHjIj9LPsVDQubyzS8Sb6T3E/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAxLzg0LzcwLzU1/LzM2MF9GXzE4NDcw/NTU1N18yZXg3ZWgz/NU1VV1Z0b2hlTTNR/Tk8xNE52VFpBZWpm/Vy5qcGc"
+      src={{isPlaying}? "https://imgs.search.brave.com/94zz8bQ3Ipr0-XIdOXCPHjIj9LPsVDQubyzS8Sb6T3E/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAxLzg0LzcwLzU1/LzM2MF9GXzE4NDcw/NTU1N18yZXg3ZWgz/NU1VV1Z0b2hlTTNR/Tk8xNE52VFpBZWpm/Vy5qcGc"
         : "https://as2.ftcdn.net/v2/jpg/01/75/02/99/1000_F_175029918_lZThlHzCNYdvoykGWtckxT7wksSa71ji.jpg"}
         alt="some description"
         />
         ) : (
       <img src="https://as2.ftcdn.net/v2/jpg/01/75/02/99/1000_F_175029918_lZThlHzCNYdvoykGWtckxT7wksSa71ji.jpg" alt="some description" />
-      )} */}
+      )}
       aewanfdj
         </button>
               <button onClick={(e)=>{handleRecording(e,letter)}}>

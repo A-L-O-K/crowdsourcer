@@ -11,20 +11,13 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [retypedPasswor, confirmRetype] = useState(''); 
-  var array=[];
-  
-
-  for (let i = 0; i < 26; i++) {
-    array[i]=false;
-    
-  }
-  console.log(array)
+  // console.log(array)
   const navigate=useNavigate();
 
   return (
     <div className="login-page">
       <h1>SignUp</h1>
-      <form onSubmit={(e)=>{dataadd(e,navigate,name,email, password,array)}}>
+      <form onSubmit={(e)=>{dataadd(e,navigate,name,email, password)}}>
         <input
   type="name"
   placeholder="Name"
@@ -71,7 +64,7 @@ async function dataadd(e,navigate,name, email, password,array) {
       email: email,
       password: password,
       region: "",
-      flag: array,
+      flag: [],
     });
 
 
