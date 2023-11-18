@@ -12,6 +12,7 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [retypedPasswor, confirmRetype] = useState(''); 
   var array=[];
+  
 
   for (let i = 0; i < 26; i++) {
     array[i]=false;

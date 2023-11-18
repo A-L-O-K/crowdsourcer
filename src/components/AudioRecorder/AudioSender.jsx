@@ -29,17 +29,17 @@ function AudioSender() {
   //   setSelectedFile(file);
   // };
   const array2=['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-  // useEffect(() => {
-  //   const reference = doc(app, "users", auth.currentUser.uid);
-  //   getDoc(reference).then((docSnap) => {
-  //     if (docSnap.exists()) {
-  //       console.log("Document data:", docSnap.data());
-  //       setfirst(docSnap.data().name)
-  //     } else {
-  //       // doc.data() will be undefined in this case
-  //       console.log("No such document!");
-  //     }
-  //   });}, [])
+  useEffect(() => {
+    const reference = doc(app, "users", auth.currentUser.uid);
+    getDoc(reference).then((docSnap) => {
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+        setfirst(docSnap.data().name)
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+      }
+    });}, [])
     
   const handleRecording = async (e,letter) => {
     seta(letter)
