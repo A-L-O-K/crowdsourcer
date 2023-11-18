@@ -154,14 +154,19 @@ const Profile = () => {
       <div style={styles.formGroup}>
         {isEditing ? (
           <div style={styles.buttonGroup}>
+            <div className="flex gap-4 border-4 p-2 shadow-md  text-md transition ease-in-out hover:bg-blue-500">
             <button onClick={handleSaveClick}>Save</button>
-            <button onClick={handleEditClick}>Cancel</button>
+            </div>
+            <div className="flex gap-4 border-4 p-2 shadow-md  text-md transition ease-in-out hover:bg-blue-500">
+            <button onClick={handleEditClick}>Cancel</button></div>
           </div>
         ) : (
           <div style={styles.buttonGroup}>
             {/* make a button which on hover */}
-            <button  onClick={handleEditClick}>Edit Profile</button>
-            <button onClick={handleDeleteClick}>Delete Account</button>
+            <div className="flex gap-4 border-4 p-2 shadow-md  text-md transition ease-in-out hover:bg-blue-500">
+            <button  onClick={handleEditClick}>Edit Profile</button></div>
+            <div className="flex gap-4 border-4 p-2 shadow-md  text-md transition ease-in-out hover:bg-blue-500">
+            <button onClick={handleDeleteClick}>Delete Account</button></div>
           </div>
         )}
       </div>
