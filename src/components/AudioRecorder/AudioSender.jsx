@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {storage} from "../Firebase/config";
-import { updateDoc,setDoc,doc,arrayUnion } from "firebase/firestore";
+import { updateDoc,setDoc,doc,arrayUnion, getDoc } from "firebase/firestore";
 import './AudioSender.css'
 import { wait } from "@testing-library/user-event/dist/utils";
 import { getAuth} from "firebase/auth";
@@ -23,7 +23,7 @@ function AudioSender() {
   const auth = getAuth(app);
   const recordedChunks = useRef([]);
   const [first, setfirst] = useState("")
-  // const storageRef = ref(storage, "audio/");
+  // const storageRef = ref(storage, "audio/");data
   const recordImg = "https://cdn-icons-png.flaticon.com/512/60/60955.png";
   const stopImg = "https://cdn-icons-png.flaticon.com/512/1082/1082810.png";
   // const handleFileChange = (e) => {
@@ -32,15 +32,13 @@ function AudioSender() {
   // };
   const array2=['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
   useEffect(() => {
-    const docRef = doc(firestore, "credentials", `${auth.currentUser.uid}`);    
-    setDoc(docRef).then((docSnap) => {
-      if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
-        setChecked(docSnap.data().name)
-      } else {
-        console.log("No such document!");
-      }
-    });}, [])
+    const docRef = doc(firestore, "credentials", `${auth.currentUser.uid}`);   
+    getDoc(docRef, {
+
+      
+  
+  })},[]);
+
     
   const handleRecording = async (e,letter) => {
     e.preventDefault();
