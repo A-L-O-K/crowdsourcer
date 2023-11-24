@@ -160,7 +160,6 @@ function update() {
 
   return (
     <div className="record-container">
-    <div>{checked}</div>
       <div>
     
       {array2.map((letter) => (
@@ -176,7 +175,7 @@ function update() {
         ) : (
       <img src="https://as2.ftcdn.net/v2/jpg/01/75/02/99/1000_F_175029918_lZThlHzCNYdvoykGWtckxT7wksSa71ji.jpg" alt="some description" />
       )}
-      aewanfdj
+      {letter}
         </button>
               <button onClick={(e)=>{handleRecording(e,letter)}}>
     {letter === a ? (
