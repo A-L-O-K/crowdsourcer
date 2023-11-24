@@ -23,26 +23,40 @@ function AudioSender() {
   const auth = getAuth(app);
   const recordedChunks = useRef([]);
   const [first, setfirst] = useState("")
-  // const storageRef = ref(storage, "audio/");data
   const recordImg = "https://cdn-icons-png.flaticon.com/512/60/60955.png";
   const stopImg = "https://cdn-icons-png.flaticon.com/512/1082/1082810.png";
-  // const handleFileChange = (e) => {
-  //   const file = e.target.files[0];
-  //   setSelectedFile(file);
-  // };
-  const array2=['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-  useEffect(() => {
-    const docRef = doc(firestore, "credentials", `${auth.currentUser.uid}`);   
-    getDoc(docRef, {
 
-      
+  const array2=['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+
+function update() {
+  const docRef = doc(firestore, "credentials", `${auth.currentUser.uid}`); //db
+  getDoc(docRef)
+    .then((doc) => {
+      if (doc.exists()) {
+        console.log("Document data:", doc.data().flag);
+        setChecked(doc.data().flag)
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+      }
+    })
+    .catch((error) => {
+      console.log("Error getting document:", error);
+    });
+  }
   
-  })},[]);
+  useEffect(() => {
+    update()
+  }, [])
 
     
   const handleRecording = async (e,letter) => {
     e.preventDefault();
     seta(letter)
+    setChecked([...checked,letter])
+    await updateDoc(doc(firestore, "credentials", `${auth.currentUser.uid}`), {
+      flag: arrayUnion(letter)
+  });
 
     const storageRef = ref(storage, `audio/${auth.currentUser.uid}/${letter}.wav`);
 
@@ -75,7 +89,7 @@ function AudioSender() {
 
           wait(3000).then(() => {
             setfirst("")
-          })  
+          })  //useEffect
           
         };
 
@@ -146,6 +160,7 @@ function AudioSender() {
 
   return (
     <div className="record-container">
+    <div>{checked}</div>
       <div>
     
       {array2.map((letter) => (
@@ -176,7 +191,7 @@ function AudioSender() {
         {/* <input type="checkbox" />
          */}
 {/* CHECKBOX WITH VALUE TRUE */}
-<input type="checkbox" checked={checked.includes({letter})} />
+<input type="checkbox" checked={checked.includes(letter)} />
         {' '}
       </label>{letter}</div>
         </button>
